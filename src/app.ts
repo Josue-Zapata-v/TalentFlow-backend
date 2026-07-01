@@ -8,6 +8,7 @@ import { swaggerSpec } from "./config/swagger";
 import { errorMiddleware } from "./middlewares/error.middleware";
 import { apiRateLimiter } from "./middlewares/rateLimiter.middleware";
 import { authRoutes } from "./modules/auth/auth.routes";
+import { vacantesRoutes } from "./modules/vacantes/vacantes.routes";
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(apiRateLimiter);
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/api/auth", authRoutes);
+app.use("/api/vacantes", vacantesRoutes);
 
 app.get("/api/health", (_req: Request, res: Response) => {
   res.json({ success: true, data: { status: "ok" }, message: "TalentFlow API operativa" });
