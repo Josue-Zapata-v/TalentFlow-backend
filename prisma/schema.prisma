@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Rol {
+  ADMIN
+  RECLUTADOR
+  POSTULANTE
+}
+
+enum ModalidadVacante {
+  REMOTO
+  PRESENCIAL
+  HIBRIDO
+}
+
+enum EstadoVacante {
+  ABIERTA
+  CERRADA
+  BORRADOR
+}
+
+enum EstadoPostulacion {
+  POSTULADO
+  EN_REVISION
+  ENTREVISTA
+  OFERTA
+  RECHAZADO
+  CONTRATADO
+}
+
+model User {
+  id           String   @id @default(uuid())
+  nombre       String
+  email        String   @unique
+  passwordHash String
+  rol          Rol
+  createdAt    DateTime @default(now())
+
+  vacantesCreadas Vacante[]      @relation("ReclutadorVacantes")
+  postulaciones   Postulacion[]  @relation("PostulanteFn")
+  cambiosEstado   HistorialEstado[] @relation("CambiadoPor")
+
+  @@map("users")
+}
+
+model Vacante {
+  id            String           @id @default(uuid())
+  titulo        String
+  slug          String           @unique
+  descripcion   String
+  requisitos    String
+  ubicacion     String
+  modalidad     ModalidadVacante
+  salarioRango  String?
+  categoria     String?
+  estado        EstadoVacante    @default(BORRADOR)
+  reclutadorId  String
+  reclutador    User             @relation("ReclutadorVacantes", fields: [reclutadorId], references: [id])
+  createdAt     DateTime         @default(now())
+
+  postulaciones Postulacion[]
+
+  @@map("vacantes")
+}
+
+model Postulacion {
+  id            String            @id @default(uuid())
+  vacanteId     String
+  vacante       Vacante           @relation(fields: [vacanteId], references: [id])
+  postulanteId  String
+  postulante    User              @relation("PostulanteFn", fields: [postulanteId], references: [id])
+  cvUrl         String?
+  observaciones String?
+  estado        EstadoPostulacion @default(POSTULADO)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  historial HistorialEstado[]
+
+  @@unique([vacanteId, postulanteId])
+  @@map("postulaciones")
+}
+
+model HistorialEstado {
+  id             String            @id @default(uuid())
+  postulacionId  String
+  postulacion    Postulacion       @relation(fields: [postulacionId], references: [id])
+  estadoAnterior EstadoPostulacion?
+  estadoNuevo    EstadoPostulacion
+  cambiadoPorId  String
+  cambiadoPor    User              @relation("CambiadoPor", fields: [cambiadoPorId], references: [id])
+  fecha          DateTime          @default(now())
+
+  @@map("historial_estados")
+}
