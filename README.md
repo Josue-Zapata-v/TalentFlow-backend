@@ -35,7 +35,8 @@ Completa `.env` con tus credenciales de Supabase y tus propios secretos de JWT (
 |---|---|
 | `NODE_ENV` | `development`, `test` o `production` |
 | `PORT` | Puerto del servidor (default `4000`) |
-| `DATABASE_URL` | Cadena de conexión de Postgres (Supabase) |
+| `DATABASE_URL` | Cadena de conexión con connection pooling de Supabase (Transaction mode, puerto `6543`), usada por la app en runtime |
+| `DIRECT_URL` | Cadena de conexión directa de Supabase (puerto `5432`), usada solo por Prisma Migrate |
 | `JWT_SECRET` | Secreto para firmar el access token |
 | `JWT_REFRESH_SECRET` | Secreto para firmar el refresh token |
 | `JWT_ACCESS_EXPIRES_IN` | Duración del access token (default `15m`) |
