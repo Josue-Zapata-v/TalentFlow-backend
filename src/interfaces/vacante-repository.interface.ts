@@ -1,4 +1,7 @@
 import { EstadoVacante, ModalidadVacante, Vacante } from "@prisma/client";
+import { PaginatedResult } from "../shared/types/pagination";
+
+export type { PaginatedResult };
 
 export interface VacanteFilters {
   ubicacion?: string;
@@ -6,13 +9,6 @@ export interface VacanteFilters {
   categoria?: string;
   estado?: EstadoVacante;
   reclutadorId?: string;
-  page: number;
-  limit: number;
-}
-
-export interface PaginatedResult<T> {
-  data: T[];
-  total: number;
   page: number;
   limit: number;
 }

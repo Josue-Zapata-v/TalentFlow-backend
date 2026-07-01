@@ -59,9 +59,10 @@ describe("Postulaciones", () => {
   });
 
   afterAll(async () => {
-    await prisma.historialEstado.deleteMany({ where: { postulacion: { vacanteId: { in: [vacanteAbiertaId, vacanteBorradorId] } } } });
-    await prisma.postulacion.deleteMany({ where: { vacanteId: { in: [vacanteAbiertaId, vacanteBorradorId] } } });
-    await prisma.vacante.deleteMany({ where: { id: { in: [vacanteAbiertaId, vacanteBorradorId] } } });
+    const vacanteIds = [vacanteAbiertaId, vacanteBorradorId].filter(Boolean);
+    await prisma.historialEstado.deleteMany({ where: { postulacion: { vacanteId: { in: vacanteIds } } } });
+    await prisma.postulacion.deleteMany({ where: { vacanteId: { in: vacanteIds } } });
+    await prisma.vacante.deleteMany({ where: { id: { in: vacanteIds } } });
     await prisma.user.deleteMany({
       where: { email: { in: [reclutadorEmail, otroReclutadorEmail, postulanteEmail, postulante2Email] } },
     });
