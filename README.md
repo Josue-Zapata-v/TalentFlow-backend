@@ -4,6 +4,12 @@ Backend del sistema de reclutamiento (ATS) TalentFlow, proyecto académico del c
 
 API REST construida con Express 5, TypeScript y Prisma sobre PostgreSQL (Supabase). El frontend (Next.js, repositorio separado) consume esta API vía `fetch`.
 
+**URL pública (producción):** https://talentflow-backend-dlry.onrender.com
+**Swagger:** https://talentflow-backend-dlry.onrender.com/api/docs
+**Health check:** https://talentflow-backend-dlry.onrender.com/api/health
+
+> El plan free de Render "duerme" el servicio tras ~15 min sin tráfico. La primera petición tras eso puede tardar 30-50s (cold start).
+
 ## Stack
 
 - Node.js 20+, Express 5, TypeScript
@@ -76,7 +82,12 @@ npm test
 
 ## Despliegue
 
-Backend desplegado en **Render** (detección nativa de Node.js, sin Docker). La base de datos vive en **Supabase** tanto en desarrollo como en producción.
+Backend desplegado en **Render** (detección nativa de Node.js, sin Docker) en https://talentflow-backend-dlry.onrender.com. La base de datos vive en **Supabase** tanto en desarrollo como en producción.
+
+Build Command: `npm install && npx prisma migrate deploy && npm run build`
+Start Command: `npm start`
+
+Nota: Render aplica `NODE_ENV=production` también durante el build, lo que hace que `npm install` omita las `devDependencies` (TypeScript, `@types/*`, Prisma CLI). Por eso el servicio tiene la variable `NPM_CONFIG_PRODUCTION=false`, que fuerza a instalarlas igual para poder compilar.
 
 ## Credenciales de prueba (seed)
 
