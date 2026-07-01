@@ -30,6 +30,14 @@ export class VacantesService {
     return this.repo.findManageMany(scopedFilters);
   }
 
+  async getById(id: string): Promise<Vacante> {
+    const vacante = await this.repo.findById(id);
+    if (!vacante) {
+      throw new NotFoundError("Vacante no encontrada");
+    }
+    return vacante;
+  }
+
   async getManageById(id: string, user: JwtPayload): Promise<Vacante> {
     const vacante = await this.repo.findById(id);
     if (!vacante) {
