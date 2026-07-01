@@ -1,3 +1,4 @@
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { Request, Response } from "express";
 import helmet from "helmet";
@@ -6,6 +7,7 @@ import { env } from "./config/env";
 import { swaggerSpec } from "./config/swagger";
 import { errorMiddleware } from "./middlewares/error.middleware";
 import { apiRateLimiter } from "./middlewares/rateLimiter.middleware";
+import { authRoutes } from "./modules/auth/auth.routes";
 
 const app = express();
 
@@ -17,9 +19,12 @@ app.use(
   }),
 );
 app.use(express.json());
+app.use(cookieParser());
 app.use(apiRateLimiter);
 
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.use("/api/auth", authRoutes);
 
 app.get("/api/health", (_req: Request, res: Response) => {
   res.json({ success: true, data: { status: "ok" }, message: "TalentFlow API operativa" });
