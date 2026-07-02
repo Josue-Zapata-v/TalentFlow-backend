@@ -14,10 +14,20 @@ import { vacantesRoutes } from "./modules/vacantes/vacantes.routes";
 
 const app = express();
 
+// CORS_ORIGIN admite una lista separada por comas (ej. localhost para
+// desarrollo + la URL de Vercel en producción), no solo un origen fijo.
+const allowedOrigins = env.CORS_ORIGIN.split(",").map((origin) => origin.trim());
+
 app.use(helmet());
 app.use(
   cors({
-    origin: env.CORS_ORIGIN,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Origen no permitido por CORS"));
+      }
+    },
     credentials: true,
   }),
 );

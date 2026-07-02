@@ -182,7 +182,7 @@ El slug en `Vacante` es clave para que el frontend genere URLs amigables para SE
 - El backend corre con `npm run dev` en local, conectado directamente a Supabase — no hace falta instalar ni levantar Postgres localmente.
 - **Despliegue en Render** usando su detección nativa de Node.js (`package.json` → `npm install && npm run build && npm start`), sin `Dockerfile` ni imágenes que gestionar.
 - Variables de entorno (`DATABASE_URL`, `JWT_SECRET`, `JWT_REFRESH_SECRET`, `CORS_ORIGIN`, etc.) se configuran directamente en el dashboard de Render, nunca hardcodeadas ni commiteadas.
-- `CORS_ORIGIN` debe apuntar a la URL de producción de Vercel una vez el frontend esté desplegado (y a `http://localhost:3000` en desarrollo).
+- `CORS_ORIGIN` admite una **lista separada por comas** (`app.ts` la parsea y valida el origen de cada request contra esa lista) — así se puede tener `http://localhost:3000` (dev) y la URL de producción de Vercel al mismo tiempo, sin tener que alternar el valor cada vez que se prueba localmente contra el backend desplegado.
 - Como el frontend (Vercel) y el backend (Render) viven en dominios distintos, la cookie `httpOnly` del refresh token necesita `SameSite=None; Secure` y el frontend debe llamar a `fetch` con `credentials: 'include'` — sin esto el login funciona en Postman/Swagger pero falla en el navegador.
 
 ---

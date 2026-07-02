@@ -48,7 +48,7 @@ Completa `.env` con tus credenciales de Supabase y tus propios secretos de JWT (
 | `JWT_ACCESS_EXPIRES_IN` | Duración del access token (default `15m`) |
 | `JWT_REFRESH_EXPIRES_IN` | Duración del refresh token (default `7d`) |
 | `BCRYPT_SALT_ROUNDS` | Rondas de salt para bcrypt (default `10`) |
-| `CORS_ORIGIN` | URL del frontend permitida por CORS |
+| `CORS_ORIGIN` | URLs del frontend permitidas por CORS, separadas por coma (ej. `http://localhost:3000,https://mi-app.vercel.app`) |
 
 ## Base de datos
 
