@@ -42,7 +42,12 @@ export async function refresh(req: Request, res: Response) {
 }
 
 export function logout(_req: Request, res: Response) {
-  res.clearCookie(REFRESH_COOKIE_NAME, { path: "/api/auth" });
+  res.clearCookie(REFRESH_COOKIE_NAME, {
+    httpOnly: true,
+    secure: env.NODE_ENV === "production",
+    sameSite: env.NODE_ENV === "production" ? "none" : "lax",
+    path: "/api/auth",
+  });
   res.status(200).json({ success: true, data: null, message: "Sesión cerrada" });
 }
 
